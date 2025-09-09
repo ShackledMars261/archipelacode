@@ -28,7 +28,7 @@
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "yarn run compile-tests && yarn run compile",
-    "lint": "eslint src --fix",
+    "lint": "eslint src",
     "test": "vscode-test",
     "prepare": "husky install",
     "format": "prettier --write"
@@ -55,8 +55,8 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,html,json}": [
-      "eslint --fix",
-      "prettier --write"
+      "prettier --write",
+      "eslint"
     ],
     "*.scss": "prettier --write"
   }
