@@ -14,8 +14,9 @@
   "contributes": {
     "commands": [
       {
-        "command": "archipelacode.helloWorld",
-        "title": "Hello World"
+        "command": "archipelacode.start",
+        "title": "Start ArchipelaCode Session",
+        "category": "ArchipelaCode"
       }
     ]
   },
@@ -27,10 +28,12 @@
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
-    "lint": "eslint src",
+    "lint": "eslint src --fix",
     "test": "vscode-test",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "format": "prettier --write"
   },
+  "dependencies": {},
   "devDependencies": {
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
@@ -40,6 +43,8 @@
     "@vscode/test-cli": "^0.0.11",
     "@vscode/test-electron": "^2.5.2",
     "eslint": "^9.32.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
     "husky": "^8.0.0",
     "lint-staged": "^16.1.6",
     "prettier": "^3.6.2",
@@ -54,11 +59,16 @@
       "eslint"
     ],
     "*.js": [
+      "prettier --write",
       "eslint"
     ],
     "*.html": [
-      "eslint",
-      "prettier --write"
+      "prettier --write",
+      "eslint"
+    ],
+    "*.json": [
+      "prettier --write",
+      "eslint"
     ],
     "*.scss": "prettier --write"
   }
