@@ -1,0 +1,13 @@
+{
+  "tabWidth": 2,
+  "useTabs": false,
+  "experimentalTernaries": true,
+  "printWidth": 80,
+  "bracketSameLine": true,
+  "requirePragma": true,
+  "insertPragma": true,
+  "checkIgnorePragma": true,
+  "endOfLine": "lf",
+  "embeddedLanguageFormatting": "auto",
+  "singleAttributePerLine": false
+}

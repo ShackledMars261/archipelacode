@@ -31,7 +31,8 @@
     "lint": "eslint src",
     "test": "vscode-test",
     "prepare": "husky install",
-    "format": "prettier --write"
+    "prettier": "prettier --check src",
+    "prettier:fix": "prettier --write src"
   },
   "dependencies": {},
   "devDependencies": {
