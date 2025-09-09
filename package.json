@@ -54,21 +54,10 @@
     "webpack-cli": "^6.0.1"
   },
   "lint-staged": {
-    "*.ts": [
+    "*.{ts,tsx,js,jsx,html,json}": [
+      "eslint",
       "prettier --write",
-      "eslint"
-    ],
-    "*.js": [
-      "prettier --write",
-      "eslint"
-    ],
-    "*.html": [
-      "prettier --write",
-      "eslint"
-    ],
-    "*.json": [
-      "prettier --write",
-      "eslint"
+      "git add"
     ],
     "*.scss": "prettier --write"
   }
