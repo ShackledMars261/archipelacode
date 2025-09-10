@@ -1,0 +1,24 @@
+# TODO
+
+- [ ]- VS Code Extension
+    - [ ]- Prevent "locked" language features from getting used
+    - [ ]- Create challenge webview
+    - [ ]- Create programming environment
+    - [ ]- Make it easy to add new languages (something like 'import * as languages from "./languages/languages"; languages.python.whatever')
+- Archipelago
+    - [ ]- APWorld
+        - [ ]- Create item list
+        - [ ]- Create locations
+        - [ ]- Get working in MW generation
+        - [ ]- Write en_ArchipelaCode.md
+        - [ ]- Write setup.md
+    - [ ]- Client
+        - [ ]- Connect to Archipelago
+        - [ ]- Send checks to Archipelago
+        - [ ]- Receive items from Archipelago
+        - [ ]- Handle secure and insecure websocket connections
+        - [ ]- Reconnect if connection drops
+- [ ]- LeetCode
+    - [ ]- Connect to LeetCode
+    - [ ]- Get problem from LeetCode
+    - [ ]- Submit solution to LeetCode
