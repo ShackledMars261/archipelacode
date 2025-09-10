@@ -5,7 +5,7 @@
     - [ ]- Create challenge webview
     - [ ]- Create programming environment
     - [ ]- Make it easy to add new languages (something like 'import * as languages from "./languages/languages"; languages.python.whatever')
-- Archipelago
+- [ ]- Archipelago
     - [ ]- APWorld
         - [ ]- Create item list
         - [ ]- Create locations
