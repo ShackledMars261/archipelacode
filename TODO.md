@@ -22,3 +22,5 @@
     - [ ]- Connect to LeetCode
     - [ ]- Get problem from LeetCode
     - [ ]- Submit solution to LeetCode
+- [ ]- Other
+    - [ ]- Write README.md
