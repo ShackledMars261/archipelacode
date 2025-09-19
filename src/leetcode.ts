@@ -2,7 +2,6 @@
 import * as vscode from "vscode";
 import { apVerifier } from "./apVerifier";
 import { globalState } from "./globalState";
-import { archipelacodeChannel } from "./outputChannel";
 import {
   checkRuncode,
   interpretSolution,
@@ -113,9 +112,6 @@ class LeetCodeController {
     fileContents: string,
     lang: string,
   ): Promise<boolean> {
-    archipelacodeChannel.appendLine(fileContents);
-    archipelacodeChannel.appendLine(lang);
-    archipelacodeChannel.appendLine(titleSlug);
     let question = await queryQuestionDetail(titleSlug);
     if (await apVerifier.verifySubmission(lang, fileContents)) {
       let interpretResponse = await interpretSolution(
@@ -133,8 +129,6 @@ class LeetCodeController {
         resp = await checkRuncode(runCode, titleSlug);
         state = resp["state"];
       }
-      archipelacodeChannel.appendLine(resp.state);
-      archipelacodeChannel.appendLine(resp.correct_answer);
       let result = resp["correct_answer"];
       return result;
     } else {

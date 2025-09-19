@@ -1,7 +1,6 @@
 /** @format */
 import axios from "axios";
 import { globalState } from "../globalState";
-import { archipelacodeChannel } from "../outputChannel";
 import { getUrl } from "../shared";
 import { parseCookie } from "../utils";
 
@@ -12,9 +11,6 @@ export const interpretSolution = async (
   typedCode: string,
   dataInput: string,
 ) => {
-  archipelacodeChannel.appendLine(
-    getUrl("interpretSolutionUrl").replace("PROBLEMSLUG", problemSlug),
-  );
   let cookie = String(globalState.getCookie());
   let cookiePairs = parseCookie(cookie);
   let referer = `https://leetcode.com/problems/${problemSlug}/`;
