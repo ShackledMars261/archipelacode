@@ -1,6 +1,13 @@
-import * as vscode from 'vscode';
-import * as globals from '../globals';
+/** @format */
 
-export function getStatus(currentStatus: globals.APStatus) {
-    vscode.window.showInformationMessage(Object.keys(globals.APStatus).filter(key => isNaN(Number(key)))[Number(currentStatus)]);
+import * as vscode from "vscode";
+import { apController } from "../archipelago";
+import * as shared from "../shared";
+
+export function getStatus() {
+  vscode.window.showInformationMessage(
+    Object.keys(shared.APStatus).filter((key) => isNaN(Number(key)))[
+      Number(apController.status)
+    ],
+  );
 }

@@ -2,6 +2,8 @@
   "name": "archipelacode",
   "displayName": "ArchipelaCode",
   "description": "Archipelago MW implementation for VS Code and LeetCode",
+  "author": "Jack Martin",
+  "publisher": "ShackledMars261",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.103.0"
@@ -9,7 +11,9 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onUri"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
@@ -27,8 +31,85 @@
         "command": "archipelacode.setStatus",
         "title": "Set Current Status",
         "category": "ArchipelaCodeDEBUG"
+      },
+      {
+        "command": "archipelacode.apConnectionTest",
+        "title": "Test Connect to Archipelago",
+        "category": "ArchipelaCodeDEBUG"
+      },
+      {
+        "command": "archipelacode.apSendCheck",
+        "title": "Send Check to Archipelago",
+        "category": "ArchipelaCodeDEBUG"
+      },
+      {
+        "command": "archipelacode.submitCode",
+        "title": "Submit current code to LeetCode",
+        "category": "ArchipelaCode"
+      },
+      {
+        "command": "archipelacode.resetMemento",
+        "title": "Reset the Memento cache in globalStatus",
+        "category": "ArchipelaCodeDEBUG"
+      },
+      {
+        "command": "archipelacode.refreshExplorer",
+        "title": "Refresh the Problem Explorer",
+        "category": "ArchipelaCodeDEBUG"
+      },
+      {
+        "command": "archipelacode.openProblem",
+        "title": "Opens a problem",
+        "category": "ArchipelaCode"
       }
-    ]
+    ],
+    "configuration": [
+      {
+        "title": "ArchipelaCode",
+        "properties": {
+          "archipelacode.leetCodeEndpoint": {
+            "type": "string",
+            "default": "leetcode",
+            "scope": "application",
+            "enum": [
+              "leetcode",
+              "leetcode-cn"
+            ],
+            "description": "Endpoint of your LeetCode user account."
+          },
+          "archipelacode.nodePath": {
+            "type": "string",
+            "default": "node",
+            "scope": "application",
+            "description": "The Node.js executable path. for example, C:\\Program Files\\nodejs\\node.exe"
+          },
+          "archipelacode.colorizeProblems": {
+            "type": "boolean",
+            "default": true,
+            "scope": "application",
+            "description": "Add difficulty badge and colorize problems files in explorer tree."
+          }
+        }
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "archipelacodeViewContainer",
+          "title": "ArchipelaCode",
+          "icon": "resources/archipelago_icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "archipelacodeViewContainer": [
+        {
+          "id": "archipelacodeTreeView",
+          "name": "Problem Explorer",
+          "icon": "resources/archipelago_icon.svg"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "yarn run package",
@@ -44,10 +125,19 @@
     "prettier": "prettier --check src",
     "prettier:fix": "prettier --write src"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@codingsnack/leetcode-api": "^0.0.6",
+    "archipelago.js": "^2.0.4",
+    "axios": "^1.12.1",
+    "child_process": "^1.0.2",
+    "lodash": "^4.17.21",
+    "uuid": "^13.0.0"
+  },
   "devDependencies": {
+    "@types/lodash": "^4.17.20",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
+    "@types/uuid": "^10.0.0",
     "@types/vscode": "^1.103.0",
     "@typescript-eslint/eslint-plugin": "^8.39.0",
     "@typescript-eslint/parser": "^8.39.0",
