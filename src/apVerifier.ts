@@ -1,20 +1,44 @@
 /** @format */
+import { apController } from "./archipelago";
 import { BaseLanguageVerifier } from "./languages/base_lang_verifier";
-import { pythonVerifier, universalVerifier } from "./languages/languages";
+import {
+  javascriptVerifier,
+  pythonVerifier,
+  universalVerifier,
+} from "./languages/languages";
 import { langExt } from "./shared";
 import { findKeyByValue } from "./utils";
 
 class APVerifier {
-  verifiers: BaseLanguageVerifier[] = [pythonVerifier, universalVerifier];
+  languageVerifiers: BaseLanguageVerifier[] = [
+    pythonVerifier,
+    javascriptVerifier,
+  ];
+  includedVerifiers: BaseLanguageVerifier[] = [];
 
   constructor() {}
+
+  public async initialize() {
+    this.includedVerifiers = [];
+    let includedLanguages = apController.getEnabledLanguages();
+    for (const language of includedLanguages) {
+      if (language.enabled) {
+        this.languageVerifiers.forEach((verifier) => {
+          if (verifier.langSlugs.includes(language.langSlug)) {
+            this.includedVerifiers.push(verifier);
+          }
+        });
+      }
+    }
+    this.includedVerifiers.push(universalVerifier);
+  }
 
   public async verifySubmission(
     lang: string,
     fileContents: string,
   ): Promise<boolean> {
     let isValid = true;
-    this.verifiers.forEach((verifier) => {
+    this.includedVerifiers.forEach((verifier) => {
       if (verifier.langSlugs.includes(lang)) {
         if (!verifier.verify(fileContents)) {
           isValid = false;

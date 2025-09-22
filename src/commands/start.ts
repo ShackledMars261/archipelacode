@@ -2,7 +2,6 @@
 
 import * as vscode from "vscode";
 import { apController } from "../archipelago";
-import * as shared from "../shared";
 
 export async function start() {
   let apHostname = await vscode.window.showInputBox({
@@ -32,7 +31,6 @@ export async function start() {
     apPort,
     apSlotname,
     apPassword,
-    shared.APStatus.DISCONNECTED,
   );
   return apController;
 }

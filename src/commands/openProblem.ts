@@ -22,11 +22,19 @@ export async function openProblem(node: ArchipelaCodeTreeViewNode) {
       return;
     }
     let picks: Array<IQuickItemEx<string>> = [];
+    let includedLangSlugs: string[] = [];
+    apController.getEnabledLanguages().forEach((entry) => {
+      if (entry.enabled) {
+        includedLangSlugs.push(entry.langSlug);
+      }
+    });
     problem.codeSnippets.forEach((entry) => {
-      picks.push({
-        label: entry.lang,
-        value: entry.langSlug,
-      });
+      if (includedLangSlugs.includes(entry.langSlug)) {
+        picks.push({
+          label: entry.lang,
+          value: entry.langSlug,
+        });
+      }
     });
 
     const choice: IQuickItemEx<string> | undefined =
@@ -46,9 +54,6 @@ export async function openProblem(node: ArchipelaCodeTreeViewNode) {
 
     try {
       await vscode.workspace.applyEdit(wsedit);
-      archipelacodeChannel.appendLine(
-        `Created file successfully at path "${filePath.toString()}"`,
-      );
     } catch {
       archipelacodeChannel.appendLine(
         `Failed to create file at path "${filePath.toString()}"`,

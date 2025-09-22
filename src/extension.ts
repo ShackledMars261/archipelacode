@@ -1,5 +1,6 @@
 /** @format */
 import * as vscode from "vscode";
+import { apVerifier } from "./apVerifier";
 import { apController } from "./archipelago";
 import * as commands from "./commands/commands";
 import { globalState } from "./globalState";
@@ -30,6 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("archipelacode.start", async () => {
       await commands.start();
       await leetCodeController.initializeClient();
+      await apVerifier.initialize();
       await archipelaCodeTreeDataProvider.refresh();
     }),
     vscode.commands.registerCommand("archipelacode.setStatus", async () => {

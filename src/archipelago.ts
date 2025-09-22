@@ -2,7 +2,14 @@
 import * as vscode from "vscode";
 import problemsJson from "./data/problems.json";
 import { archipelacodeChannel } from "./outputChannel";
-import { APStatus, Category, Problem, State, SubProblem } from "./shared";
+import {
+  APStatus,
+  Category,
+  LangEnable,
+  Problem,
+  State,
+  SubProblem,
+} from "./shared";
 import { archipelaCodeTreeDataProvider } from "./treeView/treeDataProvider";
 import { countOccurrences } from "./utils";
 
@@ -30,13 +37,11 @@ class ArchipelagoController {
     port: number,
     slotname: string,
     password = "",
-    status = APStatus.DISCONNECTED,
   ) {
     this.hostname = hostname;
     this.port = port;
     this.slotname = slotname;
     this.password = password;
-    this.status = status;
     this.status = APStatus.CONNECTING;
 
     const { Client } = await import("archipelago.js");
@@ -111,7 +116,11 @@ class ArchipelagoController {
     archipelacodeChannel.appendLine(
       `Sending check for location '${locationID}'`,
     );
-    this.client.check(locationID);
+    await this.client.check(locationID);
+    if (this.client.room.checkedLocations.length + 1 >= this.getEndGoal()) {
+      this.client.goal();
+    }
+    await archipelaCodeTreeDataProvider.refresh();
   }
 
   titleSlugToLocationId(titleSlug: string): number {
@@ -130,15 +139,13 @@ class ArchipelagoController {
     }).Item[],
     startingIndex: number,
   ) {
-    items.forEach(async (item) => {
-      vscode.window.showInformationMessage(
-        `Received ${item.name} from ${item.sender.name}`,
-      );
-      console.log(`Received ${item.name} (${item.id})`);
-      archipelacodeChannel.appendLine(
-        `Received ${item.name} from ${item.sender.name}`,
-      );
-    });
+    if (!(this.status === APStatus.CONNECTING)) {
+      items.forEach(async (item) => {
+        vscode.window.showInformationMessage(
+          `Received ${item.name} from ${item.sender.name}`,
+        );
+      });
+    }
   }
 
   async isLocationLocked(entry: SubProblem): Promise<boolean> {
@@ -180,9 +187,40 @@ class ArchipelagoController {
     return 0;
   }
 
+  getEndGoal(): number {
+    let metadata = this.slotData.metadata;
+    if (metadata && typeof metadata === "object") {
+      for (const [key, value] of Object.entries(metadata)) {
+        if (key === "EndGoal") {
+          return Number(value);
+        }
+      }
+    }
+    return -1;
+  }
+
+  getEnabledLanguages(): LangEnable[] {
+    let result: LangEnable[] = [];
+    let metadata = this.slotData.metadata;
+    if (metadata && typeof metadata === "object") {
+      for (const [key, value] of Object.entries(metadata)) {
+        if (key === "included_languages") {
+          if (value && typeof value === "object") {
+            for (const [lang, enabled] of Object.entries(value)) {
+              result.push({
+                langSlug: lang,
+                enabled: Boolean(enabled),
+              });
+            }
+          }
+        }
+      }
+    }
+    return result;
+  }
+
   async getAllLocations(): Promise<Problem[]> {
     let problems: Problem[] = [];
-    this.getRegionFromLocationId(6700100231);
     for (const [name, entry] of Object.entries(problemsJson.problems)) {
       if (await this.isLocationIncluded(entry.locationId)) {
         problems.push({

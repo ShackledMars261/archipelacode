@@ -182,3 +182,8 @@ export const langExt: Map<string, string> = new Map([
   ["swift", "swift"],
   ["typescript", "ts"],
 ]);
+
+export interface LangEnable {
+  langSlug: string;
+  enabled: boolean;
+}

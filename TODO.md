@@ -2,27 +2,30 @@
 
 - [ ]- VS Code Extension
     - [x]- Problem Tree View
-    - [ ]- Prevent "locked" language features from getting used
+    - [x]- Prevent "locked" language features from getting used
     - [ ]- Create challenge webview
-    - [ ]- Create programming environment
+    - [ ]- Create programming environment (stuff like inline highlighting for illegal features)
     - [x]- Make it easy to add new languages (something like 'import * as languages from "./languages/languages"; languages.python.whatever')
+    - [ ]- Add all feature unlock items to verifiers
     - [ ]- Write README.md
 - [ ]- Archipelago
     - [ ]- APWorld
         - [x]- Create item list
         - [x]- Create locations
         - [x]- Get the world working in MW generation
-        - [ ]- Get end goal stuff setup
+        - [x]- Get end goal stuff setup
         - [x]- Setup randomizing locations
         - [ ]- Write en_ArchipelaCode.md
         - [ ]- Write setup.md
+        - [x]- Implement required checks logic for every problem
+        - [ ]- Add all feature unlock items
     - [ ]- Client
         - [x]- Connect to Archipelago
         - [x]- Send checks to Archipelago
         - [x]- Receive items from Archipelago
         - [x]- Handle secure and insecure websocket connections
         - [ ]- Reconnect if connection drops
-        - [ ]- Manage win condition
+        - [x]- Manage win condition
 - [x]- LeetCode
     - [x]- Sign into to LeetCode
     - [x]- Get problem from LeetCode
