@@ -162,6 +162,7 @@
       "prettier --write",
       "eslint"
     ],
+    "*.{yaml,yml}": "prettier --write",
     "*.scss": "prettier --write",
     "*.md": "cspell --no-progress --color"
   },
