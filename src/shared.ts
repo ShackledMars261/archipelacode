@@ -187,3 +187,9 @@ export interface LangEnable {
   langSlug: string;
   enabled: boolean;
 }
+
+export interface VersionIdentifier {
+  major: number;
+  minor: number;
+  patch: number;
+}

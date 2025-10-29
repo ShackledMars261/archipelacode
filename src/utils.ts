@@ -4,7 +4,7 @@ import * as cp from "child_process";
 import { omit } from "lodash";
 import * as vscode from "vscode";
 import { globalState } from "./globalState";
-import { Endpoint, langExt } from "./shared";
+import { Endpoint, langExt, VersionIdentifier } from "./shared";
 
 export async function openUrl(url: string): Promise<void> {
   vscode.commands.executeCommand("vscode.open", vscode.Uri.parse(url));
@@ -229,4 +229,17 @@ export function findKeyByValue<K, V>(
     }
   }
   return undefined; // Value not found
+}
+
+export function versionStringToVersion(
+  versionString: string,
+): VersionIdentifier {
+  const stringParts: string[] = versionString.split(".");
+  const parts: number[] = stringParts.map((part: string) => Number(part));
+  const version: VersionIdentifier = {
+    major: parts[0],
+    minor: parts[1],
+    patch: parts[2],
+  };
+  return version;
 }

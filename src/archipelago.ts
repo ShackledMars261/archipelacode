@@ -1,5 +1,6 @@
 /** @format */
 import * as vscode from "vscode";
+import packageJson from "../package.json";
 import problemsJson from "./data/problems.json";
 import { archipelacodeChannel } from "./outputChannel";
 import {
@@ -9,9 +10,10 @@ import {
   Problem,
   State,
   SubProblem,
+  VersionIdentifier,
 } from "./shared";
 import { archipelaCodeTreeDataProvider } from "./treeView/treeDataProvider";
-import { countOccurrences } from "./utils";
+import { countOccurrences, versionStringToVersion } from "./utils";
 
 class ArchipelagoController {
   hostname: string = "archipelago.gg";
@@ -106,6 +108,52 @@ class ArchipelagoController {
     }
     this.slotData = await this.client.players.self.fetchSlotData();
     this.status = APStatus.CONNECTED;
+    if (!this.checkVersion()) {
+      vscode.window.showErrorMessage(
+        "Extension is outdated! Please update the extension before continuing.",
+      );
+    }
+  }
+
+  async checkVersion(): Promise<boolean> {
+    let extensionVersion: VersionIdentifier = versionStringToVersion(
+      packageJson.version,
+    );
+    let metadata = this.slotData.metadata;
+    let apworldVersion: VersionIdentifier = {
+      major: 999,
+      minor: 999,
+      patch: 999,
+    };
+    if (metadata && typeof metadata === "object") {
+      for (const [key, value] of Object.entries(metadata)) {
+        if (key === "apworld_version") {
+          apworldVersion = versionStringToVersion(String(value));
+        }
+      }
+    }
+    archipelacodeChannel.appendLine(
+      `APWorld Version: ${apworldVersion.major}.${apworldVersion.minor}.${apworldVersion.patch}`,
+    );
+    archipelacodeChannel.appendLine(
+      `Extension Version: ${extensionVersion.major}.${extensionVersion.minor}.${extensionVersion.patch}`,
+    );
+    let result: boolean = false;
+    if (extensionVersion.major > apworldVersion.major) {
+      result = true;
+    } else if (
+      extensionVersion.major === apworldVersion.major &&
+      extensionVersion.minor > apworldVersion.minor
+    ) {
+      result = true;
+    } else if (
+      extensionVersion.major === apworldVersion.major &&
+      extensionVersion.minor > apworldVersion.minor &&
+      extensionVersion.patch >= apworldVersion.patch
+    ) {
+      result = true;
+    }
+    return result;
   }
 
   async hasLocationBeenClaimedPreviously(titleSlug: string): Promise<boolean> {
