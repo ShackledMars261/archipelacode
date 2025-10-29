@@ -44,6 +44,8 @@ class ArchipelagoController {
     this.password = password;
     this.status = APStatus.CONNECTING;
 
+    this.protocol = "ws";
+
     const { Client } = await import("archipelago.js");
     type Item = import("archipelago.js", {
       with: { "resolution-mode": "import" }

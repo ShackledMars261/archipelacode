@@ -8,6 +8,7 @@
     - [x]- Make it easy to add new languages (something like 'import * as languages from "./languages/languages"; languages.python.whatever')
     - [ ]- Add all feature unlock items to verifiers
     - [ ]- Write README.md
+    - [ ]- Check to make sure client and APWorld are the same version on connection
 - [ ]- Archipelago
     - [ ]- APWorld
         - [x]- Create item list
