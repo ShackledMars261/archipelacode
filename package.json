@@ -4,6 +4,11 @@
   "description": "Archipelago MW implementation for VS Code and LeetCode",
   "author": "ShackledMars261",
   "publisher": "ShackledMars261",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ShackledMars261/archipelacode.git"
+  },
+  "icon": "./resources/archipelago_icon128x128.png",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.103.0"
