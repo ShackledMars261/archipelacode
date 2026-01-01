@@ -24,35 +24,31 @@ class LeetCodeController {
     this.handleUriSignIn = this.handleUriSignIn.bind(this);
   }
 
-  async initializeClient() {
-    // const picks: Array<IQuickItemEx<string>> = [];
-    //
-    // picks.push(
-    // {
-    // label: "Web Authorization",
-    // detail: "Open browser to authorize login on the website",
-    // value: "WebAuth",
-    // description: "[Recommended]",
-    // },
-    // {
-    // label: "LeetCode Cookie (CURRENTLY UNSUPPORTED)",
-    // detail: "Use LeetCode cookie copied from browser to login",
-    // value: "Cookie  ",
-    // },
-    // );
-    //
-    // const choice: IQuickItemEx<string> | undefined =
-    // await vscode.window.showQuickPick(picks);
-    // if (!choice) {
-    // return;
-    // }
-    // const loginMethod: string = choice.value;
-    //
-    // if (loginMethod === "WebAuth") {
-    // openUrl(this.getAuthLoginUrl());
-    // return;
-    // }
-    openUrl(this.getAuthLoginUrl());
+  async initializeClient(
+    cookie: string | undefined,
+    expiration: number | undefined,
+  ) {
+    if (cookie === undefined || expiration === undefined) {
+      openUrl(this.getAuthLoginUrl());
+    } else {
+      if (expiration > Date.now()) {
+        const data = await queryUserData();
+        globalState.setUserStatus(data);
+        if (data.username) {
+          vscode.window.showInformationMessage(
+            `Successfully logged in as ${data.username}.`,
+          );
+          this.currentUser = data.username;
+          this.userStatus = UserStatus.SignedIn;
+        } else {
+          vscode.window.showErrorMessage(
+            "An error occurred while reconnecting to LeetCode. Please connect again.",
+          );
+        }
+      } else {
+        openUrl(this.getAuthLoginUrl());
+      }
+    }
   }
 
   public async handleUriSignIn(uri: vscode.Uri): Promise<void> {
@@ -69,7 +65,7 @@ class LeetCodeController {
             );
             return;
           }
-          await this.updateUserStatusWithCookie(cookie);
+          await this.updateUserStatusWithCookie(cookie, undefined);
         },
       );
     } catch (error) {
@@ -80,8 +76,12 @@ class LeetCodeController {
     }
   }
 
-  public async updateUserStatusWithCookie(cookie: string): Promise<void> {
+  public async updateUserStatusWithCookie(
+    cookie: string,
+    expiration: number | undefined,
+  ): Promise<void> {
     globalState.setCookie(cookie);
+    globalState.setExpiration(expiration ?? Date.now() + 86400000);
     const data = await queryUserData();
     globalState.setUserStatus(data);
     if (data.username) {
@@ -133,7 +133,7 @@ class LeetCodeController {
       return result;
     } else {
       vscode.window.showErrorMessage(
-        `Your solution uses language features you haven't unlocked yet. Please try again.`,
+        `Your solution uses language features you haven't unlocked yet. Please check the "ArchipelaCode" output channel.`,
       );
       return false;
     }

@@ -12,3 +12,10 @@ vsc-extension-quickstart.md
 **/*.map
 **/*.ts
 **/.vscode-test.*
+licenses.txt
+.cspell/**
+.github/**
+.husky/**
+.prettierignore
+.prettierrc
+TODO.md

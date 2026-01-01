@@ -47,7 +47,7 @@ export class ArchipelaCodeTreeViewNode {
   public get command(): vscode.Command {
     return {
       title: "Open Problem",
-      command: "archipelacode.openProblem", // Need to add command
+      command: "archipelacode.openProblemInEditor", // Need to add command
       arguments: [this],
     };
   }

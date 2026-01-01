@@ -6,6 +6,7 @@ import {
   pythonVerifier,
   universalVerifier,
 } from "./languages/languages";
+import { archipelacodeChannel } from "./outputChannel";
 import { langExt } from "./shared";
 import { findKeyByValue } from "./utils";
 
@@ -38,13 +39,26 @@ class APVerifier {
     fileContents: string,
   ): Promise<boolean> {
     let isValid = true;
+    let result: boolean;
+    let missingItems: number[];
+    let totalMissingItems: number[] = [];
     this.includedVerifiers.forEach((verifier) => {
       if (verifier.langSlugs.includes(lang)) {
-        if (!verifier.verify(fileContents)) {
+        [result, missingItems] = verifier.verify(fileContents);
+        if (!result) {
           isValid = false;
+          totalMissingItems = totalMissingItems.concat(missingItems);
         }
       }
     });
+    if (totalMissingItems.length > 0) {
+      archipelacodeChannel.appendLine("You are missing the following items:");
+      totalMissingItems.forEach((itemId) => {
+        archipelacodeChannel.appendLine(
+          `- ${apController.itemIdToName(itemId)}`,
+        );
+      });
+    }
     return isValid;
   }
 

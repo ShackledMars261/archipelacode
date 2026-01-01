@@ -5,10 +5,13 @@ import { BaseLanguageVerifier, RegExEntry } from "./base_lang_verifier";
 
 class PythonVerifier implements BaseLanguageVerifier {
   langSlugs: string[] = ["python", "python3"];
+  lastGeneratedLineRegex: RegExp = new RegExp(
+    "\\t| *(def)\\s+\\w*\\(.*\\)(?: ?-> ?)?\\w*:$",
+  );
   regexes: RegExEntry[] = [
     {
       itemId: 6700903100,
-      regex: new RegExp("(if) .*(:)\\s*$"),
+      regex: new RegExp("\\b(if)\\b.*"),
       disabled: false,
     },
     {
@@ -112,25 +115,40 @@ class PythonVerifier implements BaseLanguageVerifier {
 
   constructor() {}
 
-  async verify(fileContents: string): Promise<boolean> {
+  verify(fileContents: string): [boolean, number[]] {
     this.regexes.forEach((entry) => {
       if (apController.client.items.received.includes(entry.itemId)) {
         entry.disabled = true;
       }
     });
 
+    let isInUserCode = false;
     let isValid = true;
+    let missingItems: number[] = [];
     let lines = fileContents.split("\n");
     lines.forEach((line) => {
-      this.regexes.forEach((entry) => {
-        if (!entry.disabled) {
-          if (entry.regex.test(line)) {
-            isValid = false;
-          }
+      if (!isInUserCode) {
+        if (this.lastGeneratedLineRegex.test(line)) {
+          isInUserCode = true;
         }
-      });
+        return;
+      }
+      if (!this.checkIfLineIsAComment(line)) {
+        this.regexes.forEach((entry) => {
+          if (!entry.disabled) {
+            if (entry.regex.test(line)) {
+              missingItems.push(entry.itemId);
+              isValid = false;
+            }
+          }
+        });
+      }
     });
-    return isValid;
+    return [isValid, missingItems];
+  }
+
+  checkIfLineIsAComment(line: string): boolean {
+    return line.trimStart().indexOf("#") === 0;
   }
 }
 

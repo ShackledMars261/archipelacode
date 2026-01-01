@@ -2,12 +2,10 @@
 import * as vscode from "vscode";
 
 export enum APStatus {
-  NOT_RUNNING, // Extension currently isn't running
-  DISCONNECTED, // Disconnected from Archipelago
   CONNECTING, // Attempting to connect to Archipelago
   CONNECTED, // Connected to Archipelago
-  IN_CHALLENGE, // Currently in a LeetCode challenge
   DISCONNECTING, // Attempting to disconnect from Archipelago
+  DISCONNECTED, // Disconnected from Archipelago
 }
 
 export interface IQuickItemEx<T> extends vscode.QuickPickItem {
@@ -36,6 +34,7 @@ export const urls = {
   authLoginUrl: `https://leetcode.com/authorize-login/${protocol}/?path=ShackledMars261.archipelacode`,
   interpretSolutionUrl: `https://leetcode.com/problems/PROBLEMSLUG/interpret_solution/`,
   checkSolutionUrl: `https://leetcode.com/submissions/detail/RUNCODE/check/`,
+  problemUrl: `https://leetcode.com/problems/`,
 };
 
 export const urlsCn = {
@@ -47,6 +46,7 @@ export const urlsCn = {
   authLoginUrl: `https://leetcode.cn/authorize-login/${protocol}/?path=ShackledMars261.archipelacode`,
   interpretSolutionUrl: `https://leetcode.cn/problems/PROBLEMSLUG/interpret_solution/`,
   checkSolutionUrl: `https://leetcode.cn/submissions/detail/RUNCODE/check/`,
+  problemUrl: `https://leetcode.cn/problems/`,
 };
 
 // prettier-ignore
@@ -191,5 +191,5 @@ export interface LangEnable {
 export interface VersionIdentifier {
   major: number;
   minor: number;
-  patch: number;
+  build: number;
 }

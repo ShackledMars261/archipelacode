@@ -239,7 +239,7 @@ export function versionStringToVersion(
   const version: VersionIdentifier = {
     major: parts[0],
     minor: parts[1],
-    patch: parts[2],
+    build: parts[2],
   };
   return version;
 }

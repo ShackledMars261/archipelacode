@@ -2,7 +2,7 @@
   "name": "archipelacode",
   "displayName": "ArchipelaCode",
   "description": "Archipelago MW implementation for VS Code and LeetCode",
-  "author": "Jack Martin",
+  "author": "ShackledMars261",
   "publisher": "ShackledMars261",
   "version": "0.0.1",
   "engines": {
@@ -20,6 +20,41 @@
       {
         "command": "archipelacode.start",
         "title": "Start ArchipelaCode Session",
+        "category": "ArchipelaCode"
+      },
+      {
+        "command": "archipelacode.reconnect",
+        "title": "Reconnect to last Archipelago Session",
+        "category": "ArchipelaCode"
+      },
+      {
+        "command": "archipelacode.disconnect",
+        "title": "Disconnect from Archipelago",
+        "category": "ArchipelaCode"
+      },
+      {
+        "command": "archipelacode.sendMessage",
+        "title": "Send Message to Archipelago",
+        "category": "ArchipelaCode"
+      },
+      {
+        "command": "archipelacode.listItems",
+        "title": "List your currently unlocked \"Language Features\"",
+        "category": "ArchipelaCode"
+      },
+      {
+        "command": "archipelacode.submitCode",
+        "title": "Submit current code to LeetCode",
+        "category": "ArchipelaCode"
+      },
+      {
+        "command": "archipelacode.openProblemInEditor",
+        "title": "Opens a Problem in the Editor",
+        "category": "ArchipelaCode"
+      },
+      {
+        "command": "archipelacode.openProblemInBrowser",
+        "title": "Opens the current Problem on LeetCode",
         "category": "ArchipelaCode"
       },
       {
@@ -43,11 +78,6 @@
         "category": "ArchipelaCodeDEBUG"
       },
       {
-        "command": "archipelacode.submitCode",
-        "title": "Submit current code to LeetCode",
-        "category": "ArchipelaCode"
-      },
-      {
         "command": "archipelacode.resetMemento",
         "title": "Reset the Memento cache in globalStatus",
         "category": "ArchipelaCodeDEBUG"
@@ -56,11 +86,6 @@
         "command": "archipelacode.refreshExplorer",
         "title": "Refresh the Problem Explorer",
         "category": "ArchipelaCodeDEBUG"
-      },
-      {
-        "command": "archipelacode.openProblem",
-        "title": "Opens a problem",
-        "category": "ArchipelaCode"
       }
     ],
     "configuration": [
@@ -81,17 +106,51 @@
             "type": "string",
             "default": "node",
             "scope": "application",
-            "description": "The Node.js executable path. for example, C:\\Program Files\\nodejs\\node.exe"
+            "description": "The Node.js executable path. For example, C:\\Program Files\\nodejs\\node.exe"
           },
           "archipelacode.colorizeProblems": {
             "type": "boolean",
             "default": true,
             "scope": "application",
             "description": "Add difficulty badge and colorize problems files in explorer tree."
+          },
+          "archipelacode.debug": {
+            "type": "boolean",
+            "default": false,
+            "scope": "application",
+            "description": "Enables or disables the debug commands in the command palette. Meant for developing the extension."
           }
         }
       }
     ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "archipelacode.getStatus",
+          "when": "config.archipelacode.debug"
+        },
+        {
+          "command": "archipelacode.setStatus",
+          "when": "config.archipelacode.debug"
+        },
+        {
+          "command": "archipelacode.apConnectionTest",
+          "when": "config.archipelacode.debug"
+        },
+        {
+          "command": "archipelacode.apSendCheck",
+          "when": "config.archipelacode.debug"
+        },
+        {
+          "command": "archipelacode.resetMemento",
+          "when": "config.archipelacode.debug"
+        },
+        {
+          "command": "archipelacode.refreshExplorer",
+          "when": "config.archipelacode.debug"
+        }
+      ]
+    },
     "viewsContainers": {
       "activitybar": [
         {

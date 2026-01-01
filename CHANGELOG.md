@@ -4,6 +4,8 @@ All notable changes to the "archipelacode" extension will be documented in this 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [Unreleased]
+## [0.0.1] - 2026-01-01
 
-- Initial release
+### Added
+
+- All of the base logic.

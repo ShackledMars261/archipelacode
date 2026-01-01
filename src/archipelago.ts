@@ -2,6 +2,7 @@
 import * as vscode from "vscode";
 import packageJson from "../package.json";
 import problemsJson from "./data/problems.json";
+import { APConnectionInfo, globalState } from "./globalState";
 import { archipelacodeChannel } from "./outputChannel";
 import {
   APStatus,
@@ -27,6 +28,7 @@ class ArchipelagoController {
   slotData!: import("archipelago.js", {
     with: { "resolution-mode": "import" }
   }).JSONRecord;
+  extensionVersion!: VersionIdentifier;
 
   constructor() {}
 
@@ -46,12 +48,17 @@ class ArchipelagoController {
     this.password = password;
     this.status = APStatus.CONNECTING;
 
+    this.extensionVersion = await this.getExtensionVersion();
+
     this.protocol = "ws";
 
     const { Client } = await import("archipelago.js");
     type Item = import("archipelago.js", {
       with: { "resolution-mode": "import" }
     }).Item;
+    type MessageNode = import("archipelago.js", {
+      with: { "resolution-mode": "import" }
+    }).MessageNode;
     this.client = new Client();
 
     const uuid = await import("uuid");
@@ -59,8 +66,8 @@ class ArchipelagoController {
 
     // archipelacodeChannel.appendLine(`Your UUID: ${this.uuid}`);
 
-    this.client.messages.on("message", (content: string) => {
-      archipelacodeChannel.appendLine(content);
+    this.client.messages.on("message", (text: string) => {
+      archipelacodeChannel.appendLine(text);
     });
 
     this.client.items.on(
@@ -81,9 +88,9 @@ class ArchipelagoController {
           tags: [],
           uuid: this.uuid,
           version: {
-            build: 0,
-            major: 6,
-            minor: 3,
+            major: 0,
+            minor: 6,
+            build: 3,
           },
         });
       }
@@ -99,31 +106,45 @@ class ArchipelagoController {
           tags: [],
           uuid: this.uuid,
           version: {
-            build: 0,
-            major: 6,
-            minor: 3,
+            major: 0,
+            minor: 6,
+            build: 3,
           },
         });
       }
     }
     this.slotData = await this.client.players.self.fetchSlotData();
     this.status = APStatus.CONNECTED;
-    if (!this.checkVersion()) {
+    if (!(await this.checkVersion())) {
       vscode.window.showErrorMessage(
         "Extension is outdated! Please update the extension before continuing.",
       );
+      archipelacodeChannel.appendLine(
+        "Extension is outdated! Please update the extension before continuing.",
+      );
     }
+
+    let connectionInfo: APConnectionInfo = {
+      hostname: this.hostname,
+      port: this.port,
+      slotname: this.slotname,
+      password: this.password,
+    };
+
+    globalState.setAPConnectionInfo(connectionInfo);
+  }
+
+  async getExtensionVersion(): Promise<VersionIdentifier> {
+    return versionStringToVersion(packageJson.version);
   }
 
   async checkVersion(): Promise<boolean> {
-    let extensionVersion: VersionIdentifier = versionStringToVersion(
-      packageJson.version,
-    );
+    let extensionVersion: VersionIdentifier = await this.getExtensionVersion();
     let metadata = this.slotData.metadata;
     let apworldVersion: VersionIdentifier = {
       major: 999,
       minor: 999,
-      patch: 999,
+      build: 999,
     };
     if (metadata && typeof metadata === "object") {
       for (const [key, value] of Object.entries(metadata)) {
@@ -132,12 +153,6 @@ class ArchipelagoController {
         }
       }
     }
-    archipelacodeChannel.appendLine(
-      `APWorld Version: ${apworldVersion.major}.${apworldVersion.minor}.${apworldVersion.patch}`,
-    );
-    archipelacodeChannel.appendLine(
-      `Extension Version: ${extensionVersion.major}.${extensionVersion.minor}.${extensionVersion.patch}`,
-    );
     let result: boolean = false;
     if (extensionVersion.major > apworldVersion.major) {
       result = true;
@@ -148,12 +163,22 @@ class ArchipelagoController {
       result = true;
     } else if (
       extensionVersion.major === apworldVersion.major &&
-      extensionVersion.minor > apworldVersion.minor &&
-      extensionVersion.patch >= apworldVersion.patch
+      extensionVersion.minor === apworldVersion.minor &&
+      extensionVersion.build >= apworldVersion.build
     ) {
       result = true;
+    } else {
+      result = false;
     }
     return result;
+  }
+
+  async disconnectIfConnected(): Promise<void> {
+    if (this.status === APStatus.CONNECTED) {
+      this.status = APStatus.DISCONNECTING;
+      this.client.socket.disconnect();
+      this.status = APStatus.DISCONNECTED;
+    }
   }
 
   async hasLocationBeenClaimedPreviously(titleSlug: string): Promise<boolean> {
@@ -237,6 +262,18 @@ class ArchipelagoController {
     return 0;
   }
 
+  itemIdToName(itemId: number): string {
+    let items = this.slotData.items;
+    if (items && typeof items === "object") {
+      for (const [key, value] of Object.entries(items)) {
+        if (key === String(itemId)) {
+          return String(value);
+        }
+      }
+    }
+    return "Unknown Item";
+  }
+
   getEndGoal(): number {
     let metadata = this.slotData.metadata;
     if (metadata && typeof metadata === "object") {
@@ -294,6 +331,22 @@ class ArchipelagoController {
       }
     }
     return problems;
+  }
+
+  async sendMessage(message: string): Promise<void> {
+    await this.client.messages.say(message);
+  }
+
+  getReceivedItemNames(): string[] {
+    type Item = import("archipelago.js", {
+      with: { "resolution-mode": "import" }
+    }).Item;
+    let items: Item[] = this.client.items.received;
+    let names: string[] = [];
+    items.forEach((item) => {
+      names.push(item.name);
+    });
+    return names;
   }
 }
 

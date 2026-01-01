@@ -30,8 +30,24 @@ export function activate(context: vscode.ExtensionContext) {
     }),
     vscode.commands.registerCommand("archipelacode.start", async () => {
       await commands.start();
-      await leetCodeController.initializeClient();
+      await leetCodeController.initializeClient(undefined, undefined);
       await apVerifier.initialize();
+      await archipelaCodeTreeDataProvider.refresh();
+    }),
+    vscode.commands.registerCommand("archipelacode.reconnect", async () => {
+      await commands.reconnect();
+      await apVerifier.initialize();
+      await archipelaCodeTreeDataProvider.refresh();
+    }),
+    vscode.commands.registerCommand("archipelacode.disconnect", async () => {
+      await commands.disconnect();
+      await archipelaCodeTreeDataProvider.refresh();
+    }),
+    vscode.commands.registerCommand("archipelacode.listItems", () => {
+      commands.listItems();
+    }),
+    vscode.commands.registerCommand("archipelacode.sendMessage", async () => {
+      await commands.sendMessage();
       await archipelaCodeTreeDataProvider.refresh();
     }),
     vscode.commands.registerCommand("archipelacode.setStatus", async () => {
@@ -60,9 +76,15 @@ export function activate(context: vscode.ExtensionContext) {
       },
     ),
     vscode.commands.registerCommand(
-      "archipelacode.openProblem",
+      "archipelacode.openProblemInEditor",
       async (node: ArchipelaCodeNode) => {
-        await commands.openProblem(node);
+        await commands.openProblemInEditor(node);
+      },
+    ),
+    vscode.commands.registerCommand(
+      "archipelacode.openProblemInBrowser",
+      () => {
+        commands.openProblemInBrowser();
       },
     ),
   );

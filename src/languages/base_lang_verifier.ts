@@ -3,7 +3,9 @@
 export interface BaseLanguageVerifier {
   regexes: RegExEntry[];
   langSlugs: string[];
-  verify(fileContents: string): Promise<boolean>;
+  lastGeneratedLineRegex: RegExp;
+  verify(fileContents: string): [boolean, number[]];
+  checkIfLineIsAComment(line: string): boolean;
 }
 
 export interface RegExEntry {

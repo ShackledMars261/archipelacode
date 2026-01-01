@@ -8,7 +8,7 @@ import { IQuickItemEx } from "../shared";
 import { ArchipelaCodeTreeViewNode } from "../treeView/treeViewNode";
 import { genFileExt, isFileEmpty } from "../utils";
 
-export async function openProblem(node: ArchipelaCodeTreeViewNode) {
+export async function openProblemInEditor(node: ArchipelaCodeTreeViewNode) {
   const titleSlug = node.titleSlug;
   const problem = await queryQuestionDetail(titleSlug);
   if (await apController.hasLocationBeenClaimedPreviously(titleSlug)) {

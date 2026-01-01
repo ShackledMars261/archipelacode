@@ -3,12 +3,16 @@
 - [ ]- VS Code Extension
     - [x]- Problem Tree View
     - [x]- Prevent "locked" language features from getting used
-    - [ ]- Create challenge webview
+    - [x]- Open LeetCode page for problem
     - [ ]- Create programming environment (stuff like inline highlighting for illegal features)
     - [x]- Make it easy to add new languages (something like 'import * as languages from "./languages/languages"; languages.python.whatever')
     - [ ]- Add all feature unlock items to verifiers
-    - [ ]- Write README.md
-    - [ ]- Check to make sure client and APWorld are the same version on connection
+    - [x]- Write README.md
+    - [x]- Check to make sure client and APWorld are the same version on connection
+    - [x]- Save LeetCode session so you don't have to log in every time
+    - [x]- Say which features you haven't unlocked when verification fails
+    - [x]- Disconnect command
+    - [x]- Hide debug commands if debug setting is false
 - [ ]- Archipelago
     - [ ]- APWorld
         - [x]- Create item list
@@ -16,17 +20,20 @@
         - [x]- Get the world working in MW generation
         - [x]- Get end goal stuff setup
         - [x]- Setup randomizing locations
-        - [ ]- Write en_ArchipelaCode.md
-        - [ ]- Write setup.md
+        - [x]- Write en_ArchipelaCode.md
+        - [x]- Write setup.md
         - [x]- Implement required checks logic for every problem
         - [ ]- Add all feature unlock items
+        - [ ]- Add opt-in support for premium problems
+        - [x]- Get generation working
     - [ ]- Client
         - [x]- Connect to Archipelago
         - [x]- Send checks to Archipelago
         - [x]- Receive items from Archipelago
         - [x]- Handle secure and insecure websocket connections
-        - [ ]- Reconnect if connection drops
         - [x]- Manage win condition
+        - [x]- Save room connection info to globalState (workspaceState?) for reconnects
+        - [ ]- Auto-reconnect if connection drops
 - [x]- LeetCode
     - [x]- Sign into to LeetCode
     - [x]- Get problem from LeetCode
