@@ -140,15 +140,15 @@ class ArchipelagoController {
 
   async checkVersion(): Promise<boolean> {
     let extensionVersion: VersionIdentifier = await this.getExtensionVersion();
-    let metadata = this.slotData.metadata;
     let apworldVersion: VersionIdentifier = {
       major: 999,
       minor: 999,
       build: 999,
     };
+    let metadata = this.slotData.metadata;
     if (metadata && typeof metadata === "object") {
       for (const [key, value] of Object.entries(metadata)) {
-        if (key === "apworld_version") {
+        if (key === "minimum_extension_version") {
           apworldVersion = versionStringToVersion(String(value));
         }
       }

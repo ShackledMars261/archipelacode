@@ -4,5 +4,6 @@ node_modules
 .vscode-test/
 *.vsix
 licenses.txt
+test-fetch.js
 
 .DS_Store

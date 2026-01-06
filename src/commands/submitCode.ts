@@ -9,10 +9,18 @@ export async function submitCode() {
     const editor = vscode.window.activeTextEditor;
     if (editor) {
       const fileContents = editor.document.getText();
-      const filename =
-        editor.document.fileName.split("/")[
-          editor.document.fileName.split("/").length - 1
-        ];
+      let filename: string;
+      if (process.platform === "win32") {
+        filename =
+          editor.document.fileName.split("\\")[
+            editor.document.fileName.split("\\").length - 1
+          ];
+      } else {
+        filename =
+          editor.document.fileName.split("/")[
+            editor.document.fileName.split("/").length - 1
+          ];
+      }
       let titleSlug = filename.split(".")[0];
       const lang = apVerifier.getFileLanguage(filename);
       if (!(await apController.hasLocationBeenClaimedPreviously(titleSlug))) {
