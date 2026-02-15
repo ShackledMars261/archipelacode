@@ -3,6 +3,10 @@
 import { apController } from "../archipelago";
 import { BaseLanguageVerifier, RegExEntry } from "./base_lang_verifier";
 
+type Item = import("archipelago.js", {
+  with: { "resolution-mode": "import" }
+}).Item;
+
 class PythonVerifier implements BaseLanguageVerifier {
   langSlugs: string[] = ["python", "python3"];
   lastGeneratedLineRegex: RegExp = new RegExp(
@@ -117,7 +121,11 @@ class PythonVerifier implements BaseLanguageVerifier {
 
   verify(fileContents: string): [boolean, number[]] {
     this.regexes.forEach((entry) => {
-      if (apController.client.items.received.includes(entry.itemId)) {
+      if (
+        apController.client.items.received
+          .map((item: Item) => item.id)
+          .includes(entry.itemId)
+      ) {
         entry.disabled = true;
       }
     });
