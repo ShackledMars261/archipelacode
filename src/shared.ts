@@ -32,8 +32,6 @@ export const urls = {
   userGraphql: "https://leetcode.com/graphql",
   login: "https://leetcode.com/accounts/login/",
   authLoginUrl: `https://leetcode.com/authorize-login/${protocol}/?path=ShackledMars261.archipelacode`,
-  interpretSolutionUrl: `https://leetcode.com/problems/PROBLEMSLUG/interpret_solution/`,
-  checkSolutionUrl: `https://leetcode.com/submissions/detail/RUNCODE/check/`,
   problemUrl: `https://leetcode.com/problems/`,
 };
 
@@ -44,13 +42,15 @@ export const urlsCn = {
   userGraphql: "https://leetcode.cn/graphql/",
   login: "https://leetcode.cn/accounts/login/",
   authLoginUrl: `https://leetcode.cn/authorize-login/${protocol}/?path=ShackledMars261.archipelacode`,
-  interpretSolutionUrl: `https://leetcode.cn/problems/PROBLEMSLUG/interpret_solution/`,
-  checkSolutionUrl: `https://leetcode.cn/submissions/detail/RUNCODE/check/`,
   problemUrl: `https://leetcode.cn/problems/`,
 };
 
+/** Sent on API requests in preference to axios's default of "axios/<version>". */
+export const USER_AGENT =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:153.0) Gecko/20100101 Firefox/153.0";
+
 // prettier-ignore
-export const getUrl = (key: "base" | "graphql" | "userGraphql" | "login" | "authLoginUrl" | "interpretSolutionUrl" | "checkSolutionUrl") => {
+export const getUrl = (key: "base" | "graphql" | "userGraphql" | "login" | "authLoginUrl" | "problemUrl") => {
   const leetCodeConfig: vscode.WorkspaceConfiguration =
     vscode.workspace.getConfiguration("archipelacode");
   const point = leetCodeConfig.get<string>(
